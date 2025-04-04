@@ -1,0 +1,78 @@
+services:
+  plex:
+    image: lscr.io/linuxserver/plex:latest
+    container_name: plex
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - VERSION=docker
+    volumes:
+      - /opt/htpc/plex/config:/config
+      - /mnt/htpc_media/TV:/data/tvshows
+      - /mnt/htpc_media/Movies:/data/movies
+    restart: unless-stopped
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - /opt/htpc/sonarr/config:/config
+      - /mnt/htpc_media/TV:/tv
+      - /opt/htpc/downloads:/downloads
+      - /opt/htpc/incomplete-downloads:/incomplete-downloads
+    ports:
+      - 8989:8989 
+    restart: unless-stopped
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - /opt/htpc/radarr/config:/config
+      - /mnt/htpc_media/Movies:/movies
+      - /opt/htpc/downloads:/downloads
+      - /opt/htpc/incomplete-downloads:/incomplete-downloads
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:latest
+    container_name: sabnzbd
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - /opt/htpc/sabnzbd/config:/config
+      - /opt/htpc/downloads:/downloads #optional
+      - /opt/htpc/incomplete-downloads:/incomplete-downloads #optional
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+
+  # qbittorrent:
+  #   image: lscr.io/linuxserver/qbittorrent:latest
+  #   container_name: qbittorrent
+  #   environment:
+  #     - PUID=1000
+  #     - PGID=1000
+  #     - TZ=Etc/UTC
+  #     - WEBUI_PORT=8080
+  #   volumes:
+  #     - /path/to/qbittorrent/config:/config
+  #     - /path/to/downloads:/downloads
+  #   ports:
+  #     - 6881:6881
+  #     - 6881/udp:6881/udp
+  #     - 8080:8080
+  #   restart: unless-stopped
