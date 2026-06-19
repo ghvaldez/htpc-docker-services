@@ -13,6 +13,7 @@ User=root
 Group=root
 
 Type=simple
+
 ExecStart=docker compose -f /opt/htpc-services/compose.yaml up
 ExecStop=docker compose -f /opt/htpc-services/compose.yaml down
 #KillMode=process
